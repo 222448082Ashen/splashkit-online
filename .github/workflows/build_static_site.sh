@@ -112,6 +112,13 @@ echo "Re-Structure Static Site"
 echo "========================================"
 cd ./sko
 
+# Move node_modules into Browser_IDE if it exists, otherwise work in current directory
+if [ -d "Browser_IDE" ]; then
+    # If Browser_IDE exists (from prebuilt), move node_modules there
+    mv node_modules Browser_IDE/
+    cd Browser_IDE
+fi
+
 # if changed, remember to update the explicit excludes above
 mv node_modules/codemirror codemirror-5.65.15
 mv node_modules/jszip/dist jszip
@@ -119,6 +126,20 @@ mv node_modules/@babel/standalone babel
 mv node_modules/split.js/dist split.js
 mv node_modules/mime/dist mime
 rm -rf external/js-lzma/data
-mv ../DemoProjects DemoProjects
 
-cd ../
+# Move DemoProjects based on current directory
+if [ "$(basename $PWD)" = "Browser_IDE" ]; then
+    mv ../../DemoProjects DemoProjects
+    cd ../../
+else
+    mv ../DemoProjects DemoProjects
+    # Create Browser_IDE directory and move everything into it for consistent upload structure
+    mkdir -p Browser_IDE
+    # Move all files except Browser_IDE itself into Browser_IDE
+    for item in *; do
+        if [ "$item" != "Browser_IDE" ]; then
+            mv "$item" Browser_IDE/
+        fi
+    done
+    cd ../
+fi
