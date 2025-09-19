@@ -129,10 +129,16 @@ rm -rf external/js-lzma/data
 
 # Move DemoProjects based on current directory
 if [ "$(basename $PWD)" = "Browser_IDE" ]; then
-    mv ../../DemoProjects DemoProjects
+    # We're in Browser_IDE, check if DemoProjects exists at ../../DemoProjects
+    if [ -d "../../DemoProjects" ]; then
+        mv ../../DemoProjects DemoProjects
+    fi
     cd ../../
 else
-    mv ../DemoProjects DemoProjects
+    # We're in sko/, check if DemoProjects exists at ../DemoProjects
+    if [ -d "../DemoProjects" ]; then
+        mv ../DemoProjects DemoProjects
+    fi
     # Create Browser_IDE directory and move everything into it for consistent upload structure
     mkdir -p Browser_IDE
     # Move all files except Browser_IDE itself into Browser_IDE
