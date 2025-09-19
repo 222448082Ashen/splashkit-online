@@ -67,9 +67,9 @@ else
 
     # first let's get a list of files _not_ to copy
     cd ./sko
-    TRACKED_FILES=$(git log --pretty=format: --name-only --diff-filter=A -- Browser_IDE| sort - | sed '/^$/d')
+    TRACKED_FILES=$(git log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d')
     EXCLUDE_FILE=$(mktemp)
-    echo "$TRACKED_FILES" | sed "s|^Browser_IDE||" > "$EXCLUDE_FILE"
+    echo "$TRACKED_FILES" > "$EXCLUDE_FILE"
 
     # add some explicit excludes
     echo "/codemirror-5.65.15" >> "$EXCLUDE_FILE"
@@ -91,7 +91,7 @@ else
     cd ../
 
     # copy in all the untracked files!
-    rsync -av --progress --exclude-from="$EXCLUDE_FILE" "prebuilt/" "sko/Browser_IDE/"
+    rsync -av --progress --exclude-from="$EXCLUDE_FILE" "prebuilt/" "sko/"
 
 fi
 
@@ -99,18 +99,18 @@ fi
 echo "========================================"
 echo "Install Node Dependencies"
 echo "========================================"
-cd ./sko/Browser_IDE
+cd ./sko
 
 npm install
 
-cd ../../
+cd ../
 
 
 
 echo "========================================"
 echo "Re-Structure Static Site"
 echo "========================================"
-cd ./sko/Browser_IDE
+cd ./sko
 
 # if changed, remember to update the explicit excludes above
 mv node_modules/codemirror codemirror-5.65.15
